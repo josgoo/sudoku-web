@@ -112,7 +112,7 @@ class App extends Component {
   }
 
   handleResetClick() {
-    const resetGrid = lib.resetGame(this.state.grid);
+    const resetGrid = lib.resetGame(this.state.grid, this.state.difficulty);
     lib.saveGame(resetGrid);
     this.setState({ grid: resetGrid });
   }

@@ -49,7 +49,10 @@ export const getHint = (index) => {
 /*
   Reset game by removing all non-given cells.
 */
-export const resetGame = (grid) => {
+export const resetGame = (grid, difficulty) => {
+  grid.difficulty = difficulty
+  console.log("Saving (reset) difficulty:  " + difficulty)
+  localStorage.setItem('sudokuDifficulty', JSON.stringify(difficulty));
   return grid.map(cell => cell.type === 'given' ? cell : emptyCell);
 }
 
@@ -58,7 +61,7 @@ export const resetGame = (grid) => {
 */
 export const saveGame = (grid) => {
   localStorage.setItem('sudokuGrid', JSON.stringify(grid));
-
+  console.log("Saving (save) difficulty:  " + grid.difficulty)
   // difficulty isn't enumerable, so store it separately
   localStorage.setItem('sudokuDifficulty', JSON.stringify(grid.difficulty));
 };
@@ -79,9 +82,10 @@ export const loadGame = () => {
   console.log(localStorage.getItem('sudokuDifficulty'))
   console.log(typeof localStorage.getItem('sudokuDifficulty'))
   if (localStorage.getItem('sudokuDifficulty') == 'undefined'){
-    return null
+    grid.difficulty = 26
+  }else{
+   grid.difficulty = JSON.parse(localStorage.getItem('sudokuDifficulty'));
   }
-  grid.difficulty = JSON.parse(localStorage.getItem('sudokuDifficulty'));
   if (grid.difficulty == null){
     grid.difficulty = 26
   }
