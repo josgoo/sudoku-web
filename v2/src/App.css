@@ -9,8 +9,10 @@
 
 .heading {
   margin: 1rem auto 0 auto;
-  width: 45rem;
+  width: 60rem;
   background-color: black;
   color: white;
   font-size: 5rem;
+  padding-bottom: 1rem;
+
 }

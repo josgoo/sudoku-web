@@ -17,8 +17,10 @@ class App extends Component {
     super(props);
     const grid = lib.loadOrCreateGame();
     this.state = {
+      difficulty: null,
       controls: {         // ControlBar selections
         hint: false,        // Whether the player wants a hint
+        difficulty: null,
       },
       grid,               // Sudoku grid
       input: {            // InputBar selections
@@ -26,16 +28,18 @@ class App extends Component {
         noteEnable: false,  // Whether to enter the selected digit as a note
       },
     };
+
   }
 
   /*
     Input handler called when a non-given cell is clicked.
 
     Determines whether any special input is desired (hint, note, etc),
-    and handles it appropriately. Otherwise, enters selected digit as cell's value.
+    and handles it appropriately. Otherwise, enters selected digit as cell's value.s
   */
   handleCellClick(index) {
     let grid = deepCopyGrid(this.state.grid);
+
     const { digit, noteEnable } = this.state.input;
 
     if (this.state.controls.hint) {
@@ -71,8 +75,25 @@ class App extends Component {
     this.setState({ grid });
   }
 
-  handleDifficultyChange(difficulty) {
-    this.setState({ grid: lib.newGame(difficulty)})
+  handleDifficultyChange(value) {
+    this.setState({difficulty : value});
+    this.handleNewGameClick(value)
+  }
+
+  handleNewGameClick(value) {
+    if (value){
+      let newGrid = lib.newGame(value)
+      lib.saveGame(newGrid);
+       this.setState({ grid: newGrid });
+    }else if (this.state.difficulty != null){
+      let newGrid = lib.newGame(this.state.difficulty)
+      lib.saveGame(newGrid);
+       this.setState({ grid: newGrid });
+    }else {
+      let newGrid = lib.newGame(this.state.grid.difficulty)
+      lib.saveGame(newGrid);
+       this.setState({ grid: newGrid });
+    }
   }
 
   handleDigitSelect(digit) {
@@ -82,6 +103,9 @@ class App extends Component {
   handleHintClick() {
     this.setState({ controls: {...this.state.controls, hint: !this.state.controls.hint} });
   }
+  handleSyncClick() {
+    window.location.reload();
+  }
 
   handleNoteToggle() {
     this.setState({ input: {...this.state.input, noteEnable: !this.state.input.noteEnable} });
@@ -89,6 +113,7 @@ class App extends Component {
 
   handleResetClick() {
     const resetGrid = lib.resetGame(this.state.grid);
+    lib.saveGame(resetGrid);
     this.setState({ grid: resetGrid });
   }
 
@@ -96,14 +121,19 @@ class App extends Component {
     return (
       <div className="App">
         <header className="heading">
-          Sudoku
+          Erika and Joseph Sudoku
         </header>
+        
         <ControlBar
           difficulty = {this.state.grid.difficulty}
           onDifficultyChange={(difficulty) => this.handleDifficultyChange(difficulty)}
           onHintClick={() => this.handleHintClick()} 
+          onSyncClick={() => this.handleSyncClick()}
           onResetClick={() => this.handleResetClick()}
+          onNewGameClick={() => this.handleNewGameClick()}
+
         />
+        <br></br>
         <Grid grid={this.state.grid} onClick={(index) => this.handleCellClick(index)}/>
         <InputBar
           onDigitSelect={(digit) => this.handleDigitSelect(digit)}

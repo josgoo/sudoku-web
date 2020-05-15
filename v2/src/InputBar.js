@@ -26,13 +26,7 @@ class InputBar extends Component {
                 <button className={styles.cell} onClick={() => this.props.onDigitSelect('7')}>7</button>
                 <button className={styles.cell} onClick={() => this.props.onDigitSelect('8')}>8</button>
                 <button className={styles.cell} onClick={() => this.props.onDigitSelect('9')}>9</button>
-                <button 
-                    className={styles.cell} 
-                    onClick={this.props.onNoteToggle}
-                    style={{marginLeft: '16px'}}
-                >
-                    N
-                </button>
+                
             </React.Fragment>
         );
     }
