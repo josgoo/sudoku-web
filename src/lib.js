@@ -76,7 +76,9 @@ export const loadGame = () => {
   if (!grid) {
     return null;
   }
-
+  if (localStorage.getItem('sudokuDifficulty') == null){
+    return null
+  }
   grid.difficulty = JSON.parse(localStorage.getItem('sudokuDifficulty'));
   if (grid.difficulty == null){
     grid.difficulty = 26
