@@ -67,7 +67,6 @@ export const saveGame = (grid) => {
   Load the game from localStorage.
 */
 export const loadGame = () => {
-  console.log(localStorage.getItem('sudokuDifficulty'))
   if (localStorage.getItem('sudokuGrid') == null){
     return null
   }
@@ -76,7 +75,10 @@ export const loadGame = () => {
   if (!grid) {
     return null;
   }
-  if (typeof localStorage.getItem('sudokuDifficulty') == 'undefined'){
+
+  console.log(localStorage.getItem('sudokuDifficulty'))
+  console.log(typeof localStorage.getItem('sudokuDifficulty'))
+  if (localStorage.getItem('sudokuDifficulty') == 'undefined'){
     return null
   }
   grid.difficulty = JSON.parse(localStorage.getItem('sudokuDifficulty'));

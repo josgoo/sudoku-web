@@ -84,7 +84,7 @@ class App extends Component {
     if (value){
       let newGrid = lib.newGame(value)
       lib.saveGame(newGrid);
-       this.setState({ grid: newGrid });
+      this.setState({ grid: newGrid });
     }else if (this.state.difficulty != null){
       let newGrid = lib.newGame(this.state.difficulty)
       lib.saveGame(newGrid);
