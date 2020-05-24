@@ -8,9 +8,10 @@ export const deepCopyGrid = (oldGrid) => {
     // Loop to deep copy the grid, as it is an Array of Objects
     for (let i = 0; i < oldGrid.length; i++) {
         const type = oldGrid[i].type;
+        const prev_type = oldGrid[i].prev_type;
         // value can be either a string (immutable) or an Array (mutable, need to copy each property)
         const value = Array.isArray(oldGrid[i].value) ? [...oldGrid[i].value] : oldGrid[i].value;
-        newGrid[i] = { type, value };
+        newGrid[i] = { type, prev_type, value };
     }
     // Copy non-enumerable properties
     newGrid.difficulty = oldGrid.difficulty;

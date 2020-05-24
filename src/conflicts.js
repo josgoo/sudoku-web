@@ -76,7 +76,8 @@ const updateConflicts = (grid) => {
     // Reset conflicts
     for (let i = 0; i < newGrid.length; i++) {
         if (newGrid[i].type === 'conflict') {
-            newGrid[i].type = 'normal';
+            console.log(newGrid[i])
+            newGrid[i].type = newGrid[i].prev_type;
         }
     }
 

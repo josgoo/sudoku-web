@@ -34,10 +34,27 @@ tr .cell:nth-of-type(6) {
     background-color: rgb(245, 245, 245);
 }
 
-.normal {
+.blue {
     color: navy;
 }
-
+.green {
+    color: Darkgreen;
+}
+.black {
+    color: black;
+}
+.pink {
+    color: pink;
+}
+.purple {
+    color: purple;
+}
+.Azure {
+    color: DarkMagenta;
+}
+.Coral {
+    color: Coral;
+}
 .conflict {
     color: red;
 }

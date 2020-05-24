@@ -21,6 +21,20 @@ class ControlBar extends Component {
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <button onClick={() => this.props.onSyncClick()}>Sync</button>
                 <button onClick={() => this.props.onResetClick()}>Reset</button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <select
+                    className={styles.colorBarBlue}
+                    onChange={(event) => this.props.onColorChange(event.target)}
+                    value={this.props.color}
+                >
+                    <option value="purple" className={styles.colorBarPurple}> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </option>
+                    <option value="Azure" className={styles.colorBarAzure}> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </option>
+                    <option value="blue" className={styles.colorBarBlue}> </option>
+                    <option value="green" className={styles.colorBarGreen}> </option>
+                    <option value="black" className={styles.colorBarBlack}> </option>
+                    <option value="pink" className={styles.colorBarPink}> </option>
+                    <option value="Coral" className={styles.colorBarCoral}> </option>
+                </select>
             </React.Fragment>
         );
     }

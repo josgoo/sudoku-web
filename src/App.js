@@ -1,8 +1,3 @@
-/*
-    Copyright (c) Will Burklund. All rights reserved. Licensed under the GPLv3 license.
-    See LICENSE file in the project root for full license information.
-*/
-
 import React, { Component } from 'react';
 import './App.css';
 import ControlBar from './ControlBar';
@@ -12,44 +7,72 @@ import * as lib from './lib';
 import { deepCopyGrid } from './util';
 import updateConflicts from './conflicts';
 
-class App extends Component {
+class App extends Component{
+
   constructor(props) {
     super(props);
-    const grid = lib.loadOrCreateGame();
+    
+    const grid = this.getGrid(-1);
+    const difficulty = this.getDifficulty();
     this.state = {
-      difficulty: null,
-      controls: {         // ControlBar selections
-        hint: false,        // Whether the player wants a hint
-        difficulty: null,
-      },
-      grid,               // Sudoku grid
+      difficulty: difficulty,
+      color: "blue",
+      grid: grid,         // Sudoku grid
       input: {            // InputBar selections
         digit: null,        // Selected digit
         noteEnable: false,  // Whether to enter the selected digit as a note
       },
     };
 
+
   }
+  saveGrid(grid) {
+      //console.log("saving Grid")
+      const requestOptions = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({grid: grid})
+      }
+      fetch("https://soduku-api.herokuapp.com/testAPI/setGrid", requestOptions)
+          .then(res => {this.setState({grid: grid})})
+          .catch(err => console.log("error"))
+  }
+  getGrid(index){
+    fetch("https://soduku-api.herokuapp.com/testAPI/getGrid")
+          .then(response => response.json())
+          .then(res => {this.setState({grid: res})})
+          .then(response => {if (index >= 0){this.handleCellClick2(index)}})
+          //.catch(err => console.log("error"))
 
-  /*
-    Input handler called when a non-given cell is clicked.
+      
+  }
+  getDifficulty(grid){
+    fetch("https://soduku-api.herokuapp.com/testAPI/getDifficulty")
+          .then(response => response.json())
+          .then(res => {this.setState({ difficulty: res })})
+          .catch(err => console.log("error"))
+  }
+  saveDifficulty(difficulty) {
+      //console.log("save difficulty: " + difficulty)
+      const requestOptions = {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({difficulty: difficulty})
+      }
+      fetch("https://soduku-api.herokuapp.com/testAPI/setDifficulty", requestOptions)
+          .then(res => {this.setState({difficulty: difficulty})})
+          .catch(err => console.log("difficulty error"))
+  }
+  handleCellClick(index){
+    this.getGrid(index)
+  }
+  handleCellClick2(index) {
 
-    Determines whether any special input is desired (hint, note, etc),
-    and handles it appropriately. Otherwise, enters selected digit as cell's value.s
-  */
-  handleCellClick(index) {
     let grid = deepCopyGrid(this.state.grid);
 
     const { digit, noteEnable } = this.state.input;
 
-    if (this.state.controls.hint) {
-      // If the player has requested a hint, set the cell's value with the correct digit
-      grid[index].value = lib.getHint(index);
-      grid[index].type = 'given';
-
-      // Disable hints until the player requests another
-      this.setState({ controls: {...this.state.controls, hint: false} });
-    } else if (noteEnable) {
+    if (noteEnable) {
       // The player wants to input a note; first check whether the cell is already type 'notes'
       if (grid[index].type !== 'notes') {
         // Do nothing if there is already a digit in the cell
@@ -64,47 +87,64 @@ class App extends Component {
       grid[index].value[digit - 1] = !grid[index].value[digit - 1];
     } else {
       // Otherwise, this was normal input. Set the cell's value with the selected digit.
-      grid[index].type = 'normal';
+      grid[index].type = this.state.color;
+      grid[index].prev_type = this.state.color;
+      //console.log(grid[index].prev_type)
       grid[index].value = digit;
     }
-    
     grid = updateConflicts(grid);
-    lib.saveGame(grid);
-    
+    //lib.saveGame(grid);
+    this.saveGrid(grid);
     // Update grid
-    this.setState({ grid });
+    //this.setState({ grid });
+  }
+
+  handleColorChange(color){
+    //console.log(color)
+    //console.log(color.options[color.selectedIndex].className)
+    color.className = color.options[color.selectedIndex].className
+
+    this.setState({color: color.value});
+    //console.log(this.state.color);
   }
 
   handleDifficultyChange(value) {
-    this.setState({difficulty : value});
+    this.saveDifficulty(value)
+    //this.setState({difficulty : value});
     this.handleNewGameClick(value)
   }
 
   handleNewGameClick(value) {
     if (value){
       let newGrid = lib.newGame(value)
-      lib.saveGame(newGrid);
-      this.setState({ grid: newGrid });
+      this.saveGrid(newGrid);
+      //lib.saveGame(newGrid);
+      //this.setState({ grid: newGrid });
     }else if (this.state.difficulty != null){
       let newGrid = lib.newGame(this.state.difficulty)
-      lib.saveGame(newGrid);
-       this.setState({ grid: newGrid });
+      this.saveGrid(newGrid);
+      //lib.saveGame(newGrid);
+      //this.setState({ grid: newGrid });
     }else {
       let newGrid = lib.newGame(this.state.grid.difficulty)
-      lib.saveGame(newGrid);
-       this.setState({ grid: newGrid });
+      this.saveGrid(newGrid);
+      //lib.saveGame(newGrid);
+      //this.setState({ grid: newGrid });
     }
   }
 
   handleDigitSelect(digit) {
     this.setState({ input: {...this.state.input, digit} });
+    this.getGrid(-1);
   }
 
   handleHintClick() {
-    this.setState({ controls: {...this.state.controls, hint: !this.state.controls.hint} });
+    //this.setState({ controls: {...this.state.controls, hint: !this.state.controls.hint} });
   }
   handleSyncClick() {
-    window.location.reload();
+    this.getGrid(-1)
+    this.getDifficulty()
+    //window.location.reload();
   }
 
   handleNoteToggle() {
@@ -113,8 +153,9 @@ class App extends Component {
 
   handleResetClick() {
     const resetGrid = lib.resetGame(this.state.grid, this.state.difficulty);
-    lib.saveGame(resetGrid);
-    this.setState({ grid: resetGrid });
+    this.saveGrid(resetGrid)
+    //lib.saveGame(resetGrid);
+    //this.setState({ grid: resetGrid });
   }
 
   render() {
@@ -125,8 +166,9 @@ class App extends Component {
         </header>
         
         <ControlBar
-          difficulty = {this.state.grid.difficulty}
+          difficulty = {this.state.difficulty}
           onDifficultyChange={(difficulty) => this.handleDifficultyChange(difficulty)}
+          onColorChange={(color) => this.handleColorChange(color)}
           onHintClick={() => this.handleHintClick()} 
           onSyncClick={() => this.handleSyncClick()}
           onResetClick={() => this.handleResetClick()}

@@ -26,8 +26,11 @@ class Grid extends Component {
   */
   renderCell(column, row) {
     const index = row * 9 + column; // Get the 1D cell index from row and column indices
-    const {type, value} = this.props.grid[index];
-
+    var {type, value} = {"type":"given", "value":null};
+    if (this.props.grid != null){
+      type = this.props.grid[index]['type'];
+      value = this.props.grid[index]['value'];
+    }
     if (type === 'notes') {
       return (
         <Notes 

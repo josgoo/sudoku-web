@@ -9,3 +9,74 @@
     -webkit-appearance: none;
     -moz-appearance: none;
 }
+.colorBarBlue{
+	border: none;
+	background: navy;
+	outline-width: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+select option[value="blue"] {
+  background: navy
+}
+.colorBarGreen{
+	border: none;
+	background: Darkgreen;
+	outline-width: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+select option[value="green"] {
+  background: Darkgreen
+}
+.colorBarBlack{
+	border: none;
+	background: black;
+	outline-width: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+select option[value="black"] {
+  background: black;
+}
+.colorBarPink{
+	border: none;
+	background: pink;
+	outline-width: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+select option[value="pink"] {
+  background: pink;
+}
+.colorBarPurple{
+	border: none;
+	background: purple;
+	outline-width: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+select option[value="purple"] {
+  background: purple;
+}
+.colorBarAzure{
+	border: none;
+	background: DarkMagenta;
+	outline-width: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+select option[value="Azure"] {
+  background: DarkMagenta;
+}
+.colorBarCoral{
+	border: none;
+	background: Coral;
+	outline-width: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+}
+select option[value="Coral"] {
+  background: Coral;
+}
+

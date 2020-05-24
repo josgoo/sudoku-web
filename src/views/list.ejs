@@ -1,0 +1,22 @@
+<link type="text/css" href="../App.css" rel="stylesheet" />
+<div className="App">
+        <header className="heading">
+          Erika and Joseph Sudoku
+        </header>
+        
+        <ControlBar
+          difficulty = {this.state.grid.difficulty}
+          onDifficultyChange={(difficulty) => this.handleDifficultyChange(difficulty)}
+          onHintClick={() => this.handleHintClick()} 
+          onSyncClick={() => this.handleSyncClick()}
+          onResetClick={() => this.handleResetClick()}
+          onNewGameClick={() => this.handleNewGameClick()}
+
+        />
+        <br></br>
+        <Grid grid={this.state.grid} onClick={(index) => this.handleCellClick(index)}/>
+        <InputBar
+          onDigitSelect={(digit) => this.handleDigitSelect(digit)}
+          onNoteToggle={() => this.handleNoteToggle()}
+        />
+      </div>
